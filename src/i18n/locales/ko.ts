@@ -23,7 +23,7 @@ export const ko = {
     cursor: "커서",
   },
   header: {
-    title: "Ask User Questions",
+    title: "사용자 질문하기",
     questionCount: "질문 {current} / {total}",
   },
   confirmation: {
