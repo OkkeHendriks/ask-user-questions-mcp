@@ -114,6 +114,7 @@ CONFIG KEYS (for 'config get/set')
   sessionTimeout  number (ms)                Session timeout in milliseconds
   theme           string                     UI theme name
   language        string                     UI language
+  autoStartTui    boolean                    Start TUI when the first question arrives
   renderer        \"ink\" | \"opentui\"          TUI renderer engine
   staleAction     \"warn\"|\"remove\"|\"archive\"  Action for stale sessions
   updateCheck     boolean                    Enable/disable auto-update checks

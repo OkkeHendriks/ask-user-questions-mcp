@@ -226,6 +226,21 @@ Whenever you need clarification on what you are working on, never guess, and cal
 
 When the AI asks questions, you'll see them appear in the AUQ TUI. Answer them **at your convenience**.
 
+### Automatic TUI startup
+
+By default, you start AUQ manually with `auq`.
+To open AUQ automatically when the first question arrives, enable it globally:
+
+```bash
+auq config set autoStartTui true --global
+```
+
+Disable it again with:
+
+```bash
+auq config set autoStartTui false --global
+```
+
 ### Renderer Selection
 
 AUQ supports two terminal rendering engines:
@@ -680,6 +695,7 @@ _Settings from local config override global config, which overrides defaults._
   "language": "auto",
   "theme": "system",
   "autoSelectRecommended": true,
+  "autoStartTui": false,
   "updateCheck": true,
   "notifications": {
     "enabled": true,
@@ -700,6 +716,7 @@ _Settings from local config override global config, which overrides defaults._
 | `recommendedQuestions`  | number  | 4         | 1-10                            | Suggested number of questions (for AI guidance)       |
 | `language`              | string  | "auto"    | "auto", "en", "ko"              | UI language (auto-detects from system if "auto")      |
 | `theme`                 | string  | "system"  | "system", "dark", "light", etc. | Color theme for TUI                                   |
+| `autoStartTui`          | boolean | false     | true/false                      | Open AUQ automatically when the first question arrives |
 | `sessionTimeout`        | number  | 0         | 0+ (milliseconds)               | Session timeout (0 = no timeout)                      |
 | `retentionPeriod`       | number  | 604800000 | 0+ (milliseconds)               | How long to keep completed sessions (default: 7 days) |
 | `notifications.enabled` | boolean | true      | true/false                      | Enable desktop notifications for new questions        |

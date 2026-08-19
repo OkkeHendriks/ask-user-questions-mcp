@@ -35,6 +35,7 @@ import {
   sanitizeSessionId,
   validateSessionDirectory,
 } from "./utils.js";
+import { ensureTuiStarted } from "../tui/auto-start.js";
 
 export class SessionManager {
   private baseDir: string;
@@ -121,6 +122,15 @@ export class SessionManager {
       this.writeSessionFile(sessionId, SESSION_FILES.STATUS, sessionStatus),
     ]);
 
+    try {
+      await ensureTuiStarted();
+    } catch (error) {
+      const reason = error instanceof Error ? error.message : String(error);
+      throw new Error(
+        `Failed to auto-start AUQ for session ${sessionId}. Start AUQ manually with \`auq\`. ${reason}`,
+      );
+    }
+
     return sessionId;
   }
 
@@ -173,7 +183,8 @@ export class SessionManager {
    */
   async getAllSessionIds(): Promise<string[]> {
     try {
-      return await fs.readdir(this.sessionsDir);
+      const entries = await fs.readdir(this.sessionsDir, { withFileTypes: true });
+      return entries.filter((entry) => entry.isDirectory()).map((entry) => entry.name);
     } catch (error) {
       if ((error as NodeJS.ErrnoException).code === "ENOENT") {
         return [];

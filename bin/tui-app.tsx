@@ -32,6 +32,10 @@ import {
   checkLinuxDependencies,
   type NotificationBatcher,
 } from "../src/tui/notifications/index.js";
+import {
+  registerTuiProcess,
+  unregisterTuiProcess,
+} from "../src/tui/auto-start.js";
 import { createTUIWatcher } from "../src/tui/session-watcher.js";
 import type { PendingSessionMeta } from "../src/tui/session-watcher.js";
 import {
@@ -868,21 +872,27 @@ async function runInkTui(config: AUQConfig): Promise<void> {
 }
 
 export const runTui = async (config?: AUQConfig): Promise<void> => {
-  const mergedConfig: AUQConfig = { ...DEFAULT_CONFIG, ...config };
-  const rendererType = process.env.AUQ_RENDERER || mergedConfig.renderer || "opentui";
+  await registerTuiProcess();
 
-  if (rendererType === "opentui") {
-    try {
-      const opentuiPath = "../src/tui-opentui/app.js";
-      const { runTui: runOpenTui } = (await import(opentuiPath)) as { runTui: (config: AUQConfig) => Promise<void> };
-      await runOpenTui(mergedConfig);
-    } catch (err) {
-      console.error(
-        `⚠️ OpenTUI failed to initialize: ${err instanceof Error ? err.message : String(err)}. Falling back to ink renderer.`
-      );
+  try {
+    const mergedConfig: AUQConfig = { ...DEFAULT_CONFIG, ...config };
+    const rendererType = process.env.AUQ_RENDERER || mergedConfig.renderer || "opentui";
+
+    if (rendererType === "opentui") {
+      try {
+        const opentuiPath = "../src/tui-opentui/app.js";
+        const { runTui: runOpenTui } = (await import(opentuiPath)) as { runTui: (config: AUQConfig) => Promise<void> };
+        await runOpenTui(mergedConfig);
+      } catch (err) {
+        console.error(
+          `⚠️ OpenTUI failed to initialize: ${err instanceof Error ? err.message : String(err)}. Falling back to ink renderer.`
+        );
+        await runInkTui(mergedConfig);
+      }
+    } else {
       await runInkTui(mergedConfig);
     }
-  } else {
-    await runInkTui(mergedConfig);
+  } finally {
+    unregisterTuiProcess();
   }
 };

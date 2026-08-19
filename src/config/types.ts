@@ -27,6 +27,7 @@ export const AUQConfigSchema = z.object({
   language: z.string().default("auto"),
   theme: z.string().default("system"),
   autoSelectRecommended: z.boolean().default(true),
+  autoStartTui: z.boolean().default(false),
   renderer: z.enum(["ink", "opentui"]).default("opentui"),
 
   // Stale/Orphan Session Detection

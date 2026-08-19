@@ -15,6 +15,7 @@
   "language": "auto",
   "theme": "system",
   "autoSelectRecommended": true,
+  "autoStartTui": false,
 
   "// Stale/Orphan Detection": "Configure stale session detection behavior",
   "staleThreshold": 7200000,
