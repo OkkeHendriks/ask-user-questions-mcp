@@ -86,6 +86,17 @@ describe("ConfigLoader", () => {
       expect(config).toEqual(DEFAULT_CONFIG);
     });
 
+    it("should handle a UTF-8 BOM in config files", () => {
+      vi.mocked(fs.existsSync).mockReturnValue(true);
+      vi.mocked(fs.readFileSync).mockReturnValue(
+        `\uFEFF${JSON.stringify({ autoStartTui: true })}`,
+      );
+
+      const config = loadConfig();
+
+      expect(config.autoStartTui).toBe(true);
+    });
+
     it("should validate config values with Zod", () => {
       vi.mocked(fs.existsSync).mockReturnValue(true);
       vi.mocked(fs.readFileSync).mockReturnValue(

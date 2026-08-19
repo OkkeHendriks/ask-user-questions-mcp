@@ -48,7 +48,7 @@ function readConfigFile(filePath: string): Partial<AUQConfig> | null {
       return null;
     }
 
-    const content = readFileSync(filePath, "utf-8");
+    const content = readFileSync(filePath, "utf-8").replace(/^\uFEFF/, "");
     const parsed = JSON.parse(content);
 
     // Validate with Zod (partial validation)

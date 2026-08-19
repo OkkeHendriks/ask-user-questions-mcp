@@ -216,6 +216,22 @@ describe("config command", () => {
       expect(written.notifyOnStale).toBe(false);
     });
 
+    it("should coerce JSON array values correctly", async () => {
+      vi.mocked(fs.existsSync).mockReturnValue(false);
+
+      await runConfigCommand([
+        "set",
+        "autoStartTuiArgs",
+        '["-e","auq"]',
+      ]);
+
+      expect(process.exitCode).toBeUndefined();
+      expect(fs.writeFileSync).toHaveBeenCalled();
+      const writeCall = vi.mocked(fs.writeFileSync).mock.calls[0];
+      const written = JSON.parse(writeCall[1] as string);
+      expect(written.autoStartTuiArgs).toEqual(["-e", "auq"]);
+    });
+
     it("should validate enum values", async () => {
       vi.mocked(fs.existsSync).mockReturnValue(false);
 

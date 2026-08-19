@@ -241,6 +241,42 @@ Disable it again with:
 auq config set autoStartTui false --global
 ```
 
+The built-in launcher selects a common terminal command for your operating system.
+Set `autoStartTuiCommand` and `autoStartTuiArgs` when you need a custom launcher.
+
+**Windows**
+
+```json
+{
+  "autoStartTui": true,
+  "autoStartTuiCommand": "cmd.exe",
+  "autoStartTuiArgs": ["/d", "/c", "start", "", "auq"]
+}
+```
+
+**macOS**
+
+```json
+{
+  "autoStartTui": true,
+  "autoStartTuiCommand": "osascript",
+  "autoStartTuiArgs": [
+    "-e",
+    "tell application \"Terminal\" to do script \"auq\""
+  ]
+}
+```
+
+**Linux**
+
+```json
+{
+  "autoStartTui": true,
+  "autoStartTuiCommand": "x-terminal-emulator",
+  "autoStartTuiArgs": ["-e", "auq"]
+}
+```
+
 ### Renderer Selection
 
 AUQ supports two terminal rendering engines:
@@ -696,6 +732,7 @@ _Settings from local config override global config, which overrides defaults._
   "theme": "system",
   "autoSelectRecommended": true,
   "autoStartTui": false,
+  "autoStartTuiArgs": [],
   "updateCheck": true,
   "notifications": {
     "enabled": true,
@@ -707,24 +744,26 @@ _Settings from local config override global config, which overrides defaults._
 <details>
 <summary><strong>Available Settings</strong></summary>
 
-| Setting                 | Type    | Default   | Range/Values                    | Description                                           |
-| ----------------------- | ------- | --------- | ------------------------------- | ----------------------------------------------------- |
+| Setting                 | Type    | Default   | Range/Values                    | Description                                               |
+| ----------------------- | ------- | --------- | ------------------------------- | --------------------------------------------------------- |
 | `renderer`              | string  | "opentui" | "ink", "opentui"                | Terminal rendering engine (OpenTUI default, ink fallback) |
-| `maxOptions`            | number  | 5         | 2-10                            | Maximum options per question                          |
-| `maxQuestions`          | number  | 5         | 1-10                            | Maximum questions per session                         |
-| `recommendedOptions`    | number  | 4         | 1-10                            | Suggested number of options (for AI guidance)         |
-| `recommendedQuestions`  | number  | 4         | 1-10                            | Suggested number of questions (for AI guidance)       |
-| `language`              | string  | "auto"    | "auto", "en", "ko"              | UI language (auto-detects from system if "auto")      |
-| `theme`                 | string  | "system"  | "system", "dark", "light", etc. | Color theme for TUI                                   |
-| `autoStartTui`          | boolean | false     | true/false                      | Open AUQ automatically when the first question arrives |
-| `sessionTimeout`        | number  | 0         | 0+ (milliseconds)               | Session timeout (0 = no timeout)                      |
-| `retentionPeriod`       | number  | 604800000 | 0+ (milliseconds)               | How long to keep completed sessions (default: 7 days) |
-| `notifications.enabled` | boolean | true      | true/false                      | Enable desktop notifications for new questions        |
-| `notifications.sound`   | boolean | true      | true/false                      | Play sound with notifications                         |
-| `staleThreshold`        | number  | 7200000   | 0+ (milliseconds)               | Time before a session is considered stale (2 hours)   |
-| `notifyOnStale`         | boolean | true      | true/false                      | Show toast notification when sessions become stale    |
-| `staleAction`           | string  | "warn"    | "warn", "remove", "archive"     | Action for stale sessions                             |
-| `updateCheck`           | boolean | true      | true/false                      | Enable automatic update checks on startup             |
+| `maxOptions`            | number  | 5         | 2-10                            | Maximum options per question                              |
+| `maxQuestions`          | number  | 5         | 1-10                            | Maximum questions per session                             |
+| `recommendedOptions`    | number  | 4         | 1-10                            | Suggested number of options (for AI guidance)             |
+| `recommendedQuestions`  | number  | 4         | 1-10                            | Suggested number of questions (for AI guidance)           |
+| `language`              | string  | "auto"    | "auto", "en", "ko"              | UI language (auto-detects from system if "auto")          |
+| `theme`                 | string  | "system"  | "system", "dark", "light", etc. | Color theme for TUI                                       |
+| `autoStartTui`          | boolean | false     | true/false                      | Open AUQ automatically when the first question arrives    |
+| `autoStartTuiCommand`   | string  | platform  | any                             | Override the terminal launcher command                    |
+| `autoStartTuiArgs`      | array   | platform  | string array                    | Override the terminal launcher arguments                  |
+| `sessionTimeout`        | number  | 0         | 0+ (milliseconds)               | Session timeout (0 = no timeout)                          |
+| `retentionPeriod`       | number  | 604800000 | 0+ (milliseconds)               | How long to keep completed sessions (default: 7 days)     |
+| `notifications.enabled` | boolean | true      | true/false                      | Enable desktop notifications for new questions            |
+| `notifications.sound`   | boolean | true      | true/false                      | Play sound with notifications                             |
+| `staleThreshold`        | number  | 7200000   | 0+ (milliseconds)               | Time before a session is considered stale (2 hours)       |
+| `notifyOnStale`         | boolean | true      | true/false                      | Show toast notification when sessions become stale        |
+| `staleAction`           | string  | "warn"    | "warn", "remove", "archive"     | Action for stale sessions                                 |
+| `updateCheck`           | boolean | true      | true/false                      | Enable automatic update checks on startup                 |
 
 </details>
 

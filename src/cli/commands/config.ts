@@ -128,6 +128,16 @@ function coerceValue(key: string, rawValue: string): unknown {
     return rawValue; // let Zod validation catch it
   }
 
+  // Array
+  if (schemaType === "array" || schemaType === "ZodArray") {
+    try {
+      return JSON.parse(rawValue);
+    } catch (error) {
+      if (error instanceof SyntaxError) return rawValue;
+      throw error;
+    }
+  }
+
   // Enum or string — keep as string
   return rawValue;
 }
@@ -151,7 +161,7 @@ function buildPartialConfig(
 function readConfigFileForWrite(filePath: string): Record<string, unknown> {
   try {
     if (existsSync(filePath)) {
-      const content = readFileSync(filePath, "utf-8");
+      const content = readFileSync(filePath, "utf-8").replace(/^\uFEFF/, "");
       return JSON.parse(content) as Record<string, unknown>;
     }
   } catch {
@@ -301,13 +311,15 @@ async function configSet(args: string[]): Promise<void> {
     // Build key-specific hint for human-readable mode
     if (!jsonMode) {
       const hints: Record<string, string> = {
-        maxOptions:     "Expected: number between 2 and 10",
-        maxQuestions:   "Expected: number between 1 and 10",
-        sessionTimeout: "Expected: number (milliseconds, e.g. 300000 for 5 minutes)",
-        renderer:       'Expected: \"ink\" or \"opentui\"',
-        staleAction:    'Expected: \"warn\", \"remove\", or \"archive\"',
-        theme:          "Expected: a valid theme name (see auq config get theme)",
-        language:       "Expected: a language code (e.g. \"en\", \"ko\")",
+        maxOptions:           "Expected: number between 2 and 10",
+        maxQuestions:         "Expected: number between 1 and 10",
+        sessionTimeout:       "Expected: number (milliseconds, e.g. 300000 for 5 minutes)",
+        renderer:             'Expected: "ink" or "opentui"',
+        autoStartTuiCommand:  "Expected: a non-empty terminal launcher command",
+        autoStartTuiArgs:     'Expected: a JSON array of strings, e.g. ["-e", "auq"]',
+        staleAction:          'Expected: "warn", "remove", or "archive"',
+        theme:                "Expected: a valid theme name (see auq config get theme)",
+        language:             'Expected: a language code (e.g. "en", "ko")',
       };
       const hint = hints[key];
       process.stderr.write(

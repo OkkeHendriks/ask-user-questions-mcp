@@ -109,15 +109,17 @@ GLOBAL FLAGS
   --json                       Output as machine-readable JSON (supported by most commands)
 
 CONFIG KEYS (for 'config get/set')
-  maxOptions      number (2-10)              Max options per question
-  maxQuestions    number (1-10)              Max questions per session
-  sessionTimeout  number (ms)                Session timeout in milliseconds
-  theme           string                     UI theme name
-  language        string                     UI language
-  autoStartTui    boolean                    Start TUI when the first question arrives
-  renderer        \"ink\" | \"opentui\"          TUI renderer engine
-  staleAction     \"warn\"|\"remove\"|\"archive\"  Action for stale sessions
-  updateCheck     boolean                    Enable/disable auto-update checks
+  maxOptions           number (2-10)                    Max options per question
+  maxQuestions         number (1-10)                    Max questions per session
+  sessionTimeout       number (ms)                      Session timeout in milliseconds
+  theme                string                           UI theme name
+  language             string                           UI language
+  autoStartTui         boolean                          Start TUI when the first question arrives
+  autoStartTuiCommand  string                           Override terminal launcher command
+  autoStartTuiArgs     array                            Override terminal launcher args (JSON)
+  renderer             \"ink\" | \"opentui\"                TUI renderer engine
+  staleAction          \"warn\"|\"remove\"|\"archive\"        Action for stale sessions
+  updateCheck          boolean                          Enable/disable auto-update checks
 
 ENVIRONMENT VARIABLES
   AUQ_RENDERER         Override renderer (\"ink\" or \"opentui\")

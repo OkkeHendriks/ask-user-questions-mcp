@@ -11,6 +11,7 @@ export const DEFAULT_CONFIG: AUQConfig = {
   theme: "system",
   autoSelectRecommended: true,
   autoStartTui: false,
+  autoStartTuiArgs: [],
   renderer: "opentui" as const,
   staleThreshold: 7200000, // 2 hours in ms
   notifyOnStale: true,
